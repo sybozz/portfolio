@@ -10,11 +10,6 @@ It displays a welcome page with the developer's name and demonstrates a basic se
 - 🎨 Simple, responsive UI
 - 🧑 Developer's name displayed on the homepage
 
-## 🖼️ Preview
-
-> "Hello, I'm Sharif Ahmed!  
-> Welcome to my demo frontend application built with React."
-
 ## 📁 Project Structure
 
 ```
