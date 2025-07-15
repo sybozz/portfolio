@@ -33,8 +33,8 @@ my-portfolio-demo/
 
 1. **Clone the repo**  
    ```bash
-   git clone https://github.com/your-username/your-repo.git
-   cd your-repo
+   git clone https://github.com/sybozz/portfolio
+   cd portfolio
    ```
 
 2. **Install dependencies**  
@@ -57,13 +57,3 @@ npm run build
 ```
 
 The production-ready files will be in the `dist/` folder.
-
-## 🧑‍💻 Author
-
-**Sharif Ahmed**  
-Frontend Developer  
-[github.com/sybozz](https://github.com/sybozz)
-
-## 📝 License
-
-This project is open source and free to use for learning and demo purposes.
