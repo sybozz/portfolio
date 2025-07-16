@@ -17,6 +17,6 @@ pipeline {
       }
     }
 
-    // Add other stages here (Docker build, deploy, etc.)
+    // Add other stages here (Docker build, deploy, etc.) xxxx
   }
 }
