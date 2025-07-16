@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vite-react-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: vite-react-demo
+  template:
+    metadata:
+      labels:
+        app: vite-react-demo
+    spec:
+      containers:
+        - name: vite-react-demo
+          image: vite-react-demo:latest
+          imagePullPolicy: Never # image exists locally
+          ports:
+            - containerPort: 80

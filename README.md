@@ -1,69 +1,103 @@
-# React + TypeScript + Vite
+# Personal Portfolio Demo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a simple React + Vite demo project created as part of an exam submission.
+It displays a welcome page with the developer’s name and demonstrates a basic setup for a modern frontend application.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Project Features
+-	Built with React 18
+-	Powered by Vite for fast development and builds
+-	Dockerized for container deployment
+-	Kubernetes-ready using Minikube
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project Structure
+```
+my-portfolio-demo/
+├── public/
+├── src/
+├── dist/
+├── Dockerfile
+├── .dockerignore
+├── k8s-deployment.yaml
+├── k8s-service.yaml
+├── k8s-ingress.yaml
+├── package.json
+└── vite.config.js
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Installation and Running Locally
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. Clone the repo:
+
+  ```bash
+  git clone https://github.com/your-username/your-repo.git
+  cd your-repo
+  ```
+
+2.	Install dependencies:
+  ```bash
+  npm install
+  ```
+3.	Run the development server:
+  ```bash
+  npm run dev
+  ```
+4.	Open in browser:
+  ```bash
+  http://localhost:5173
+  ```
+
+
+## Docker Instructions
+
+Build the Docker image:
+  ```bash
+  docker build -t vite-react-demo .
+  ```
+
+Run the container:
+  ```bash
+  docker run -d -p 3678:80 vite-react-demo
+  ```
+
+Open in browser:
+  ```bash
+  http://localhost:3678
+  ```
+
+
+## Kubernetes with Minikube
+1.	Start Minikube:
+  ```bash
+  minikube start
+  ```
+2.	Use Minikube’s Docker daemon:
+  ```bash
+  eval $(minikube docker-env)
+  ```
+3.	Build the Docker image inside Minikube:
+  ```bash
+  docker build -t vite-react-demo .
+  ```
+4.	Set imagePullPolicy to Never in the deployment YAML:
+  ```bash
+  imagePullPolicy: Never
+  ```
+5.	Apply Kubernetes configurations:
+  ```bash
+  kubectl apply -f k8s-deployment.yaml
+  kubectl apply -f k8s-service.yaml
+  kubectl apply -f k8s-ingress.yaml
+  ```
+6.	Expose the app using Minikube’s service helper:
+  ```bash
+  minikube service vite-react-demo-service
+  ```
+7.	Minikube will display and open a URL like:
+  ```bash
+  http://192.168.49.2:32734
+  ```
+
+Open this in your browser to view the app.
