@@ -15,6 +15,6 @@ spec:
       containers:
         - name: vite-react-demo
           image: vite-react-demo:latest
-          imagePullPolicy: Never # image exists locally
+          # imagePullPolicy: Never # image exists locally
           ports:
             - containerPort: 80
