@@ -59,14 +59,36 @@ Build the Docker image:
 
 Run the container:
   ```bash
-  docker run -d -p 3678:80 vite-react-demo
+  docker run -d -p 9097:80 vite-react-demo
   ```
 
 Open in browser:
   ```bash
-  http://localhost:3678
+  http://localhost:9097
   ```
 
+## Build and Push Docker Image
+	1.	Build the app locally:
+```npm run build```
+	2.	Build Docker image:
+```docker build -t sybozz/vite-react-app .```
+	3.	Log in to Docker Hub:
+```docker login```
+	4.	Push image:
+```docker push sybozz/vite-react-app```
+
+
+## Deploy on EC2 using Docker Compose
+	1.	SSH into your EC2 instance:
+```ssh ec2-user@your-ec2-ip```
+	2.	Create app directory:
+```sudo mkdir -p /var/www/app```
+	3.	Copy docker-compose.yml into /var/www/app, then:
+```cd /var/www/app```
+	4.	Pull and run the container:
+```docker-compose up -d```
+	5.	Access your app in browser:
+```http://your-ec2-ip:9097```
 
 ## Kubernetes with Minikube
 1.	Start Minikube:
@@ -101,9 +123,3 @@ Open in browser:
   ```
 
 Open this in your browser to view the app.
-
-1016
-
-1033
-
-1043

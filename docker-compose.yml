@@ -1,0 +1,8 @@
+version: "3.8"
+
+services:
+  web:
+    image: sybozz/vite-react-app
+    ports:
+      - "9097:80"
+    restart: unless-stopped
