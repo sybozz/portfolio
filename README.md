@@ -32,8 +32,8 @@ my-portfolio-demo/
 1. Clone the repo:
 
   ```bash
-  git clone https://github.com/your-username/your-repo.git
-  cd your-repo
+  git clone https://github.com/sybozz/portfolio.git
+  cd portfolio
   ```
 
 2.	Install dependencies:
@@ -68,27 +68,45 @@ Open in browser:
   ```
 
 ## Build and Push Docker Image
-	1.	Build the app locally:
-```npm run build```
-	2.	Build Docker image:
-```docker build -t sybozz/vite-react-app .```
-	3.	Log in to Docker Hub:
-```docker login```
-	4.	Push image:
-```docker push sybozz/vite-react-app```
+1.	Build the app locally:
+```bash
+npm run build
+```
+2.	Build Docker image:
+```bash
+docker build -t sybozz/vite-react-app .
+```
+3.	Log in to Docker Hub:
+```bash
+docker login
+```
+4.	Push image:
+```bash
+docker push sybozz/vite-react-app
+```
 
 
 ## Deploy on EC2 using Docker Compose
-	1.	SSH into your EC2 instance:
-```ssh ec2-user@your-ec2-ip```
-	2.	Create app directory:
-```sudo mkdir -p /var/www/app```
-	3.	Copy docker-compose.yml into /var/www/app, then:
-```cd /var/www/app```
-	4.	Pull and run the container:
-```docker-compose up -d```
-	5.	Access your app in browser:
-```http://your-ec2-ip:9097```
+1.	SSH into your EC2 instance:
+```bash
+ssh ec2-user@your-ec2-ip
+```
+2.	Create app directory:
+```bash
+sudo mkdir -p /var/www/app
+```
+3.	Copy docker-compose.yml into /var/www/app, then:
+```bash
+cd /var/www/app
+```
+4.	Pull and run the container:
+```bash
+docker-compose up -d
+```
+5.	Access your app in browser:
+```bash
+http://your-ec2-ip:9097
+```
 
 ## Kubernetes with Minikube
 1.	Start Minikube:
