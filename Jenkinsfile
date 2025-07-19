@@ -2,10 +2,9 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE_NAME = 'sybozz/vite-react-app'
-        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
-        COMPOSE_PATH = '/var/www/app'
-        DATE_TAG = ''
+        DOCKER_IMAGE_NAME = "sybozz/vite-react-app"
+        DATE_TAG = "${env.BUILD_NUMBER}-${new Date().format('dd-MM-HHmm')}"
+        DOCKER_COMPOSE_PATH = "/var/www/app/docker-compose.yaml"
     }
 
     triggers {
@@ -23,12 +22,6 @@ pipeline {
     }
 
     stages {
-        stage('Clean Workspace') {
-            steps {
-                cleanWs() // Remove previous build files
-            }
-        }
-
         stage('Checkout Code') {
             steps {
                 git branch: 'main',
@@ -36,50 +29,38 @@ pipeline {
             }
         }
 
-        stage('Set Image Tag') {
-            steps {
-                script {
-                    env.DATE_TAG = "${env.BUILD_NUMBER}-" + new Date().format('dd-MM-HHmm')
-                }
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${DOCKER_IMAGE_NAME}:${DATE_TAG} ."
+                script {
+                    sh "docker build -t ${DOCKER_IMAGE_NAME}:${DATE_TAG} ."
+                }
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: DOCKER_CREDENTIALS_ID,
+                    credentialsId: 'dockerhub-credentials',
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    sh """
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push ${DOCKER_IMAGE_NAME}:${DATE_TAG}
-                        docker logout
-                    """
+                    script {
+                        sh """
+                            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                            docker push ${DOCKER_IMAGE_NAME}:${DATE_TAG}
+                            docker logout
+                        """
+                    }
                 }
             }
         }
 
-        stage('Update Docker Compose') {
+        stage('Update docker-compose and Restart') {
             steps {
                 sh """
-                    sed -i 's|image: ${DOCKER_IMAGE_NAME}:.*|image: ${DOCKER_IMAGE_NAME}:${DATE_TAG}|' ${COMPOSE_PATH}/docker-compose.yaml
-                """
-            }
-        }
-
-        stage('Restart Application') {
-            steps {
-                sh """
-                    cd ${COMPOSE_PATH}
-                    docker-compose down
-                    docker-compose up -d
+                    sed -i 's|image: ${DOCKER_IMAGE_NAME}:.*|image: ${DOCKER_IMAGE_NAME}:${env.DATE_TAG}|' ${DOCKER_COMPOSE_PATH}
+                    docker-compose -f ${DOCKER_COMPOSE_PATH} pull
+                    docker-compose -f ${DOCKER_COMPOSE_PATH} up -d
                 """
             }
         }
