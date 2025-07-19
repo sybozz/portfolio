@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        APP_NAME = "Portfolio App"
         REPO_URL = 'https://github.com/sybozz/portfolio.git'
         GIT_BRANCH = 'main'
         DOCKER_IMAGE_NAME = 'sybozz/vite-react-app'
@@ -70,9 +71,31 @@ pipeline {
                     sh """
                         sed -i 's|image: ${DOCKER_IMAGE_NAME}:.*|image: ${DOCKER_IMAGE_NAME}:${DATE_TAG}|' ${DOCKER_COMPOSE_FILE}
                         docker-compose -f ${DOCKER_COMPOSE_FILE} pull
-                        docker-compose -f ${DOCKER_COMPOSE_FILE} down --remove-orphans --volumes
+                        docker-compose -f ${DOCKER_COMPOSE_FILE} down --remove-orphans
                         docker-compose -f ${DOCKER_COMPOSE_FILE} up -d
                     """
+                }
+            }
+        }
+        
+        stage('Send Google Chat Notification') {
+            when {
+                expression { currentBuild.currentResult == 'SUCCESS' }
+            }
+            steps {
+                withCredentials([string(credentialsId: 'google-chat-webhook', variable: 'WEBHOOK_URL')]) {
+                    script {
+                        def msg = """
+                        {
+                          "text": "${APP_NAME} has been updated.\\nImage: ${DOCKER_IMAGE_NAME}:${DATE_TAG}"
+                        }
+                        """
+                        sh """
+                            curl -X POST -H 'Content-Type: application/json' \
+                                 -d '${msg}' \
+                                 "$WEBHOOK_URL"
+                        """
+                    }
                 }
             }
         }
