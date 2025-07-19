@@ -2,9 +2,12 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE_NAME = "sybozz/vite-react-app"
+        REPO_URL = 'https://github.com/sybozz/portfolio.git'
+        GIT_BRANCH = 'main'
+        DOCKER_IMAGE_NAME = 'sybozz/vite-react-app'
+        DEPLOY_PATH = '/var/www/app'
+        DOCKER_COMPOSE_FILE = "${DEPLOY_PATH}/docker-compose.yaml"
         DATE_TAG = "${env.BUILD_NUMBER}-${new Date().format('dd-MM-HHmm')}"
-        DOCKER_COMPOSE_PATH = "/var/www/app/docker-compose.yaml"
     }
 
     triggers {
@@ -22,10 +25,15 @@ pipeline {
     }
 
     stages {
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+
         stage('Checkout Code') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/sybozz/portfolio.git'
+                git branch: "${GIT_BRANCH}", url: "${REPO_URL}"
             }
         }
 
@@ -55,13 +63,17 @@ pipeline {
             }
         }
 
-        stage('Update docker-compose and Restart') {
+        stage('Update Docker Compose and Restart') {
             steps {
-                sh """
-                    sed -i 's|image: ${DOCKER_IMAGE_NAME}:.*|image: ${DOCKER_IMAGE_NAME}:${env.DATE_TAG}|' ${DOCKER_COMPOSE_PATH}
-                    docker-compose -f ${DOCKER_COMPOSE_PATH} pull
-                    docker-compose -f ${DOCKER_COMPOSE_PATH} up -d
-                """
+                script {
+                    // Update image tag in the remote docker-compose.yaml
+                    sh """
+                        sed -i 's|image: ${DOCKER_IMAGE_NAME}:.*|image: ${DOCKER_IMAGE_NAME}:${DATE_TAG}|' ${DOCKER_COMPOSE_FILE}
+                        docker-compose -f ${DOCKER_COMPOSE_FILE} pull
+                        docker-compose -f ${DOCKER_COMPOSE_FILE} down --remove-orphans --volumes
+                        docker-compose -f ${DOCKER_COMPOSE_FILE} up -d
+                    """
+                }
             }
         }
     }
