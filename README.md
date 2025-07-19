@@ -9,6 +9,13 @@ It displays a welcome page with the developer’s name and demonstrates a basic 
 -	Powered by Vite for fast development and builds
 -	Dockerized for container deployment
 -	Kubernetes-ready using Minikube
+-	GitHub PR Merge Trigger via Webhook
+-	Jenkins Declarative Pipeline
+-	Docker Build & Push with version tagging
+-	Automatic deployment with docker-compose
+-	Google Chat notification after successful deployment
+-	Dynamic image tagging: buildNumber-day-month-hour-minute
+-	User data automation script for EC2 provisioning
 
 
 ## Project Structure
@@ -51,7 +58,7 @@ my-portfolio-demo/
   ```
 
 
-## Docker Instructions
+## Docker development
 
 Build the Docker image:
   ```bash
@@ -182,7 +189,7 @@ http://<EC2_PUBLIC_IP>:9097
 ```
 
 
-## Jenkins Pipeline Development
+## Jenkins Development
 
 ### Pipeline File Name: `Jenkinsfile`
 ### Pipeline Name: `base-pipeline`
