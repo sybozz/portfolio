@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        APP_NAME = "MyPortfolioApp"
+        APP_NAME = "Portfolio App"
         REPO_URL = 'https://github.com/sybozz/portfolio.git'
         GIT_BRANCH = 'main'
         DOCKER_IMAGE_NAME = 'sybozz/vite-react-app'
@@ -71,7 +71,7 @@ pipeline {
                     sh """
                         sed -i 's|image: ${DOCKER_IMAGE_NAME}:.*|image: ${DOCKER_IMAGE_NAME}:${DATE_TAG}|' ${DOCKER_COMPOSE_FILE}
                         docker-compose -f ${DOCKER_COMPOSE_FILE} pull
-                        docker-compose -f ${DOCKER_COMPOSE_FILE} down --remove-orphans --volumes
+                        docker-compose -f ${DOCKER_COMPOSE_FILE} down --remove-orphans
                         docker-compose -f ${DOCKER_COMPOSE_FILE} up -d
                     """
                 }

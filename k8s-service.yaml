@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: vite-react-demo-service
+  name: vite-react-app-service
 spec:
   selector:
-    app: vite-react-demo
+    app: vite-react-app
   ports:
     - protocol: TCP
       port: 80
